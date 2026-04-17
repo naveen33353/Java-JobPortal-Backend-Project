@@ -6,6 +6,7 @@ import com.aitrich.JobPortalSystem.Entity.JobSeeker;
 import com.aitrich.JobPortalSystem.Repository.IJobSeekerRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -19,12 +20,13 @@ public class JobSeekerServiceImp implements IJobSeekerService {
 
     private final IJobSeekerRepo repository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public JobSeekerResponseDTO createJobSeeker(JobSeekerRequestDTO dto) {
 
         JobSeeker jobSeeker = modelMapper.map(dto, JobSeeker.class);
-
+        jobSeeker.setPassword(passwordEncoder.encode(dto.getPassword()));
         JobSeeker saved = repository.save(jobSeeker);
 
         return modelMapper.map(saved, JobSeekerResponseDTO.class);
