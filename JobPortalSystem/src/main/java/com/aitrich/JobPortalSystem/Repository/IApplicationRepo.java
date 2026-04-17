@@ -13,6 +13,6 @@ public interface IApplicationRepo extends JpaRepository<Application , Long> {
 
     public List<Application> findByJobSeekerId(Long id);
 
-    @Query(value = "SELECT * FROM APPLICATION WHERE status = Approved",nativeQuery = true)
+    @Query(value = "SELECT * FROM APPLICATION WHERE LOWER(status) = 'Approved'",nativeQuery = true)
     public List<Application> findByStatus();
 }

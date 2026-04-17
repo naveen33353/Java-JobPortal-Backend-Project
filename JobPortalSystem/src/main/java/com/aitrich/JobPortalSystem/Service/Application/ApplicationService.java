@@ -53,22 +53,26 @@ public class ApplicationService implements IApplicationService {
 
     @Override
     public List<Application> searchApplicationByJobSeekerId(Long id) {
-        if(applicationRepo.findById(id).isPresent()){
-            return applicationRepo.findByJobSeekerId(id);
+
+        List<Application> applications = applicationRepo.findByJobSeekerId(id);
+
+        if (applications.isEmpty()) {
+            throw new RuntimeException("No Application found with job seeker id " + id);
         }
-        else{
-            throw  new RuntimeException("No Application found with job seeker id " + id);
-        }
+
+        return applications;
     }
 
     @Override
     public List<Application> searchApplicationByJobId(Long id) {
-        if(applicationRepo.findById(id).isPresent()){
-            return applicationRepo.findByJobId(id);
+
+        List<Application> applications = applicationRepo.findByJobId(id);
+
+        if (applications.isEmpty()) {
+            throw new RuntimeException("No Application found with job id " + id);
         }
-        else{
-            throw  new RuntimeException("No Application found with job id " + id);
-        }
+
+        return applications;
     }
 
     @Override
