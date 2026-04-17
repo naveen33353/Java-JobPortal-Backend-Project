@@ -3,6 +3,7 @@ package com.aitrich.JobPortalSystem.Controller;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerRequestDTO;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerResponseDTO;
 import com.aitrich.JobPortalSystem.Service.JobSeeker.JobSeekerServiceImp;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class JobSeekerController {
     private final JobSeekerServiceImp service;
 
     @PostMapping
-    public ResponseEntity<JobSeekerResponseDTO> create(@RequestBody JobSeekerRequestDTO dto) {
+    public ResponseEntity<JobSeekerResponseDTO> create(@Valid @RequestBody JobSeekerRequestDTO dto) {
         return ResponseEntity.ok(service.createJobSeeker(dto));
     }
 
