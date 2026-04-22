@@ -3,7 +3,10 @@ package com.aitrich.JobPortalSystem.Service.JobSeeker;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerRequestDTO;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.JobSeeker;
+import com.aitrich.JobPortalSystem.Entity.User;
+import com.aitrich.JobPortalSystem.Enums.Role;
 import com.aitrich.JobPortalSystem.Repository.IJobSeekerRepo;
+import com.aitrich.JobPortalSystem.Repository.IUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,12 +24,23 @@ public class JobSeekerServiceImp implements IJobSeekerService {
     private final IJobSeekerRepo repository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final IUserRepo userRepo;
 
     @Override
     public JobSeekerResponseDTO createJobSeeker(JobSeekerRequestDTO dto) {
 
+
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(Role.JOBSEEKER);
+
+        userRepo.save(user);
+
+
         JobSeeker jobSeeker = modelMapper.map(dto, JobSeeker.class);
-        jobSeeker.setPassword(passwordEncoder.encode(dto.getPassword()));
+        jobSeeker.setPassword(user.getPassword()); // keep sync for now
+
         JobSeeker saved = repository.save(jobSeeker);
 
         return modelMapper.map(saved, JobSeekerResponseDTO.class);

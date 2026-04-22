@@ -3,6 +3,7 @@ package com.aitrich.JobPortalSystem.Controller;
 import com.aitrich.JobPortalSystem.Service.Company.ICompanyService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.aitrich.JobPortalSystem.Entity.Company;
@@ -17,30 +18,31 @@ public class CompanyController {
 
     private  final ICompanyService service;
 
-        @PostMapping("/Company")
+        @PreAuthorize("hasRole('COMPANY')")
+        @PostMapping("/api/companies")
         public Company createCompany (@RequestBody Company company){
 
             return service.saveCompany(company);
         }
 
-        @GetMapping("/")
+        @GetMapping("/api/companies")
         public List<Company> getAllCompanies () {
                 return service.getAllCompanies();
             }
 
-            @GetMapping("/{id}")
+            @GetMapping("/api/companies/{id}")
             public Company getCompanyById (@PathVariable Long id){
 
                     return service.getCompanyById(id);
                 }
 
-                @PutMapping("/{id}")
+                @PutMapping("/api/companies/{id}")
                 public Company updateCompany (@PathVariable Long id,
                         @RequestBody Company company){
                     return service.updateCompany(id, company);
                 }
 
-                @DeleteMapping("/{id}")
+                @DeleteMapping("/api/companies/{id}")
                 public String deleteCompany (@PathVariable Long id){
                     return service.deleteCompany(id);
                 }

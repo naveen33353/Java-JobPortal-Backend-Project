@@ -17,28 +17,28 @@ public class JobController {
 
     private final JobServiceImpl jobSerive;
 
-    @PostMapping("/")
+    @PostMapping("/api/jobs")
     public ResponseEntity<JobDTO> postJob(@RequestBody JobDTO jobDto){
         return ResponseEntity.ok(jobSerive.createJob(jobDto));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/jobs/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable long id) {
         return ResponseEntity.ok(jobSerive.getJobById(id));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/api/jobs/")
     public ResponseEntity<List<Job>> getAllJobs() {
         return ResponseEntity.ok(jobSerive.listAllJob());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/jobs/{id}")
     public ResponseEntity<Job> updateJob(@PathVariable long id, @RequestBody JobDTO job) {
 
         return ResponseEntity.ok(jobSerive.updateJob(id,job));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/jobs/{id}")
     public ResponseEntity<Void> deleteJobById(@PathVariable long id) {
         jobSerive.deleteJobById(id);
         return ResponseEntity.noContent().build();
