@@ -1,6 +1,7 @@
 package com.aitrich.JobPortalSystem.Service.Company;
 
 import com.aitrich.JobPortalSystem.Entity.Company;
+import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Repository.ICompanyRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class CompanyServiceImp implements ICompanyService {
 
     @Override
     public Company saveCompany(Company company) {
+
         return repository.save(company);
     }
 
@@ -47,5 +49,27 @@ public class CompanyServiceImp implements ICompanyService {
     public String deleteCompany(Long id) {
         repository.deleteById(id);
         return "Company deleted successfully";
+    }
+
+    @Override
+    public List<Job> getJobsByCompanyId(Long companyId) {
+        Company company = repository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        return company.getJobs(); // assuming OneToMany mapping
+    }
+
+    @Override
+    public List<Company> searchCompanies(String name, String location) {
+
+        if (name != null && location != null) {
+            return repository.findByCompanyNameContainingIgnoreCaseAndLocationContainingIgnoreCase(name, location);
+        } else if (name != null) {
+            return repository.findByCompanyNameContainingIgnoreCase(name);
+        } else if (location != null) {
+            return repository.findByLocationContainingIgnoreCase(location);
+        } else {
+            return repository.findAll();
+        }
     }
 }

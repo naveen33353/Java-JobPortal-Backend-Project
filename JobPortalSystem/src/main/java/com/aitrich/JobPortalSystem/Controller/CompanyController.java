@@ -1,5 +1,6 @@
 package com.aitrich.JobPortalSystem.Controller;
 
+import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Service.Company.ICompanyService;
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +26,8 @@ public class CompanyController {
 
         @GetMapping("/")
         public List<Company> getAllCompanies () {
-                return service.getAllCompanies();
+
+            return service.getAllCompanies();
             }
 
             @GetMapping("/{id}")
@@ -42,9 +44,24 @@ public class CompanyController {
 
                 @DeleteMapping("/{id}")
                 public String deleteCompany (@PathVariable Long id){
-                    return service.deleteCompany(id);
+
+                return service.deleteCompany(id);
                 }
-            }
+
+                @GetMapping("/{id}/jobs")
+                public List<Job> getCompanyJobs(@PathVariable Long id){
+                    return service.getJobsByCompanyId(id);
+                }
+
+                @GetMapping("/search")
+                public List<Company> searchCompanies(
+                        @RequestParam(required = false) String name,
+                        @RequestParam(required = false) String location) {
+                    return service.searchCompanies(name, location);
+                }
+        }
+
+
 
 
 
