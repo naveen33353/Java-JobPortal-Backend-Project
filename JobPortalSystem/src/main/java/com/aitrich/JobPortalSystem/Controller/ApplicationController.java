@@ -16,43 +16,43 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    @PostMapping("/api/applications")
+    @PostMapping
     public ResponseEntity<ApplicationPostDTO> postApplication(@RequestBody ApplicationPostDTO applicationPostDTO) {
         return ResponseEntity.ok(applicationService.postApplication(applicationPostDTO));
     }
 
-    @GetMapping("/api/applications/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Application> getApplicationById(@PathVariable long id) {
         return ResponseEntity.ok(applicationService.getApplicationById(id));
     }
 
-    @GetMapping("/api/applications")
+    @GetMapping
     public ResponseEntity<List<Application>> getAllApplications() {
         return ResponseEntity.ok(applicationService.getAllApplications());
     }
 
-    @PutMapping("/api/applications/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Application> updateApplication(@RequestBody ApplicationPostDTO applicationDTO, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.updateApplication(applicationDTO,id));
     }
 
-    @DeleteMapping("/api/applications/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteApplication(@PathVariable long id) {
         applicationService.deleteApplicationById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/api/applications/job/{jobId}")
+    @GetMapping("/job/{jobId}")
     public ResponseEntity<List<Application>> getApplicationsByJobId(@PathVariable long jobId) {
         return ResponseEntity.ok(applicationService.searchApplicationByJobId(jobId));
     }
 
-    @GetMapping("/api/applications/jobseeker/{jobId}")
+    @GetMapping("/jobseeker/{jobId}")
     public ResponseEntity<List<Application>> getApplicationByJobSeekerId(@PathVariable long jobId){
         return ResponseEntity.ok(applicationService.searchApplicationByJobSeekerId(jobId));
     }
 
-    @PutMapping("/api/applications/{id}/{status}")
+    @PutMapping("/{id}/{status}")
     public ResponseEntity<ApplicationPostDTO> setStatus(@PathVariable String status, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.setStatus(status , id));
     }

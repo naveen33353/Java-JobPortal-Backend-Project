@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface IApplicationRepo extends JpaRepository<Application , Long> {
 
-    public List<Application> findByJobId(Long id);
+    public List<Application> findByJob_JobId(Long jobId);
 
-    public List<Application> findByJobSeekerId(Long id);
+    public List<Application> findByJobSeeker_Id(Long id);
 
     @Query(value = "SELECT * FROM APPLICATION WHERE LOWER(status) = 'Approved'",nativeQuery = true)
     public List<Application> findByStatus();

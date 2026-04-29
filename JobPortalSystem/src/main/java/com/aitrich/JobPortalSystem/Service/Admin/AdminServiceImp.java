@@ -1,5 +1,6 @@
 package com.aitrich.JobPortalSystem.Service.Admin;
 
+import com.aitrich.JobPortalSystem.DTO.JobDTO;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Service.Company.ICompanyService;
@@ -30,7 +31,7 @@ public class AdminServiceImp implements IAdminService{
     //----I need to have company authorization methods----
 
     @Override
-    public List<Job>getAllJobs(){
+    public List<JobDTO>getAllJobs(){
         return jobService.listAllJob();
     }
 
