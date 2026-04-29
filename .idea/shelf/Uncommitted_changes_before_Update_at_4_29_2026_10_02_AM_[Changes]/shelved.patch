@@ -1,0 +1,294 @@
+Index: JobPortalSystem/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.application.name=JobPortalSystem\r\n\r\nspring.servlet.multipart.max-file-size=5MB\r\nspring.servlet.multipart.max-request-size=5MB\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/JobPortalSystem/src/main/resources/application.properties b/JobPortalSystem/src/main/resources/application.properties
+--- a/JobPortalSystem/src/main/resources/application.properties	(revision eca1450cc351c4608375539128fd4cfbbbb6dccd)
++++ b/JobPortalSystem/src/main/resources/application.properties	(date 1777186680248)
+@@ -2,3 +2,11 @@
+ 
+ spring.servlet.multipart.max-file-size=5MB
+ spring.servlet.multipart.max-request-size=5MB
++
++spring.datasource.url=jdbc:mysql://localhost:3306/job_portal_db
++spring.datasource.username=root
++spring.datasource.password=AbiMySQL678
++spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
++
++spring.jpa.hibernate.ddl-auto=update
++spring.jpa.show-sql=true
+Index: JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Repository/IApplicationRepo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.aitrich.JobPortalSystem.Repository;\r\n\r\nimport com.aitrich.JobPortalSystem.Entity.Application;\r\nimport org.springframework.data.annotation.CreatedBy;\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.data.jpa.repository.Query;\r\n\r\nimport java.util.List;\r\n\r\npublic interface IApplicationRepo extends JpaRepository<Application , Long> {\r\n\r\n    public List<Application> findByJobId(Long id);\r\n\r\n    public List<Application> findByJobSeekerId(Long id);\r\n\r\n    @Query(value = \"SELECT * FROM APPLICATION WHERE LOWER(status) = 'Approved'\",nativeQuery = true)\r\n    public List<Application> findByStatus();\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Repository/IApplicationRepo.java b/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Repository/IApplicationRepo.java
+--- a/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Repository/IApplicationRepo.java	(revision eca1450cc351c4608375539128fd4cfbbbb6dccd)
++++ b/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Repository/IApplicationRepo.java	(date 1777187794082)
+@@ -7,12 +7,12 @@
+ 
+ import java.util.List;
+ 
+-public interface IApplicationRepo extends JpaRepository<Application , Long> {
++public interface IApplicationRepo extends JpaRepository<Application, Long> {
+ 
+     public List<Application> findByJobId(Long id);
+ 
+     public List<Application> findByJobSeekerId(Long id);
+ 
+-    @Query(value = "SELECT * FROM APPLICATION WHERE LOWER(status) = 'Approved'",nativeQuery = true)
++    @Query(value = "SELECT * FROM APPLICATION WHERE LOWER(status) = 'Approved'", nativeQuery = true)
+     public List<Application> findByStatus();
+ }
+\ No newline at end of file
+Index: JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Entity/Application.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.aitrich.JobPortalSystem.Entity;\r\n\r\nimport com.aitrich.JobPortalSystem.Entity.Company;\r\nimport com.aitrich.JobPortalSystem.Enums.Status;\r\nimport com.fasterxml.jackson.annotation.JsonIdentityInfo;\r\nimport jakarta.persistence.*;\r\nimport lombok.Getter;\r\nimport lombok.NoArgsConstructor;\r\nimport lombok.Setter;\r\nimport lombok.ToString;\r\n\r\nimport java.time.LocalDate;\r\n\r\n@Entity\r\n@NoArgsConstructor\r\n@Getter\r\n@Setter\r\npublic class Application {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private long id;\r\n\r\n    @ManyToOne\r\n    @JoinColumn(name = \"job_seeker_id\")\r\n    @Column(nullable = false)\r\n    private JobSeeker jobSeeker;\r\n\r\n    @ManyToOne\r\n    @JoinColumn(name = \"job_id\")\r\n    @Column(nullable = false)\r\n    private Job job;\r\n\r\n    @Enumerated(EnumType.STRING)\r\n    @Column(nullable = false)\r\n    private Status status;\r\n\r\n    @Column(nullable = false)\r\n    private LocalDate appliedDate;\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Entity/Application.java b/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Entity/Application.java
+--- a/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Entity/Application.java	(revision eca1450cc351c4608375539128fd4cfbbbb6dccd)
++++ b/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Entity/Application.java	(date 1777187280710)
+@@ -23,12 +23,10 @@
+ 
+     @ManyToOne
+     @JoinColumn(name = "job_seeker_id")
+-    @Column(nullable = false)
+     private JobSeeker jobSeeker;
+ 
+     @ManyToOne
+     @JoinColumn(name = "job_id")
+-    @Column(nullable = false)
+     private Job job;
+ 
+     @Enumerated(EnumType.STRING)
+Index: JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Configuration/SecurityConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.aitrich.JobPortalSystem.Configuration;\r\n\r\nimport org.springframework.context.annotation.Bean;\r\nimport org.springframework.context.annotation.Configuration;\r\nimport org.springframework.security.config.Customizer;\r\nimport org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;\r\nimport org.springframework.security.config.annotation.web.builders.HttpSecurity;\r\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\r\nimport org.springframework.security.crypto.password.PasswordEncoder;\r\nimport org.springframework.security.web.SecurityFilterChain;\r\n\r\n@Configuration\r\n@EnableMethodSecurity\r\npublic class SecurityConfig {\r\n\r\n    @Bean\r\n    public PasswordEncoder passwordEncoder() {\r\n        return new BCryptPasswordEncoder();\r\n    }\r\n\r\n    @Bean\r\n    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\r\n\r\n        http\r\n                .csrf(csrf -> csrf.disable())\r\n                .authorizeHttpRequests(auth -> auth\r\n\r\n\r\n                        .requestMatchers(\"/api/auth/**\").permitAll()\r\n\r\n\r\n                        .requestMatchers(\"/admin/**\").hasRole(\"ADMIN\")\r\n                        .requestMatchers(\"/jobseekers/**\").hasRole(\"JOBSEEKER\")\r\n                        .requestMatchers(\"/api/company/**\").hasRole(\"COMPANY\")\r\n\r\n\r\n                        .anyRequest().authenticated()\r\n                )\r\n                .httpBasic(Customizer.withDefaults());\r\n\r\n        return http.build();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Configuration/SecurityConfig.java b/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Configuration/SecurityConfig.java
+--- a/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Configuration/SecurityConfig.java	(revision eca1450cc351c4608375539128fd4cfbbbb6dccd)
++++ b/JobPortalSystem/src/main/java/com/aitrich/JobPortalSystem/Configuration/SecurityConfig.java	(date 1776834303365)
+@@ -27,8 +27,6 @@
+ 
+ 
+                         .requestMatchers("/api/auth/**").permitAll()
+-
+-
+                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                         .requestMatchers("/jobseekers/**").hasRole("JOBSEEKER")
+                         .requestMatchers("/api/company/**").hasRole("COMPANY")
+Index: .idea/Java-JobPortal-Backend-Project.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Java-JobPortal-Backend-Project.iml b/.idea/Java-JobPortal-Backend-Project.iml
+new file mode 100644
+--- /dev/null	(date 1775024020159)
++++ b/.idea/Java-JobPortal-Backend-Project.iml	(date 1775024020159)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1775024020252)
++++ b/.idea/modules.xml	(date 1775024020252)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/Java-JobPortal-Backend-Project.iml" filepath="$PROJECT_DIR$/.idea/Java-JobPortal-Backend-Project.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1775024020320)
++++ b/.idea/misc.xml	(date 1775024020320)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="MavenProjectsManager">
++    <option name="originalFiles">
++      <list>
++        <option value="$PROJECT_DIR$/JobPortalSystem/pom.xml" />
++      </list>
++    </option>
++  </component>
++  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-26" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1775024022008)
++++ b/.idea/.gitignore	(date 1775024022008)
+@@ -0,0 +1,10 @@
++# Default ignored files
++/shelf/
++/workspace.xml
++# Ignored default folder with query files
++/queries/
++# Datasource local storage ignored files
++/dataSources/
++/dataSources.local.xml
++# Editor-based HTTP Client requests
++/httpRequests/
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+new file mode 100644
+--- /dev/null	(date 1775024082942)
++++ b/.idea/compiler.xml	(date 1775024082942)
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <annotationProcessing>
++      <profile default="true" name="Default" enabled="true" />
++      <profile name="Annotation profile for JobPortalSystem" enabled="true">
++        <sourceOutputDir name="target/generated-sources/annotations" />
++        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
++        <outputRelativeToContentRoot value="true" />
++        <processorPath useClasspath="false">
++          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
++        </processorPath>
++        <module name="JobPortalSystem" />
++      </profile>
++    </annotationProcessing>
++  </component>
++  <component name="JavacSettings">
++    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
++      <module name="JobPortalSystem" options="-parameters" />
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: JobPortalSystem/target/classes/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.application.name=JobPortalSystem\r\n\r\nspring.servlet.multipart.max-file-size=5MB\r\nspring.servlet.multipart.max-request-size=5MB\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/JobPortalSystem/target/classes/application.properties b/JobPortalSystem/target/classes/application.properties
+--- a/JobPortalSystem/target/classes/application.properties	(revision eca1450cc351c4608375539128fd4cfbbbb6dccd)
++++ b/JobPortalSystem/target/classes/application.properties	(date 1777186691888)
+@@ -2,3 +2,11 @@
+ 
+ spring.servlet.multipart.max-file-size=5MB
+ spring.servlet.multipart.max-request-size=5MB
++
++spring.datasource.url=jdbc:mysql://localhost:3306/job_portal_db
++spring.datasource.username=root
++spring.datasource.password=AbiMySQL678
++spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
++
++spring.jpa.hibernate.ddl-auto=update
++spring.jpa.show-sql=true
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+new file mode 100644
+--- /dev/null	(date 1775024020522)
++++ b/.idea/encodings.xml	(date 1775024020522)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="file://$PROJECT_DIR$/JobPortalSystem/src/main/java" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1775024020608)
++++ b/.idea/vcs.xml	(date 1775024020608)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+new file mode 100644
+--- /dev/null	(date 1775024020638)
++++ b/.idea/jarRepositories.xml	(date 1775024020638)
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Central Repository" />
++      <option name="url" value="https://repo.maven.apache.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
