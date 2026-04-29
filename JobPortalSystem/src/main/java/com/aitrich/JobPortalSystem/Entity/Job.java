@@ -23,6 +23,9 @@ public class Job {
     @JoinColumn(name = "company_id")
     private Company company;
 
+    @Column(name = "job_title")
+    private String title;
+
     @Column(name = "Job_Description")
     private String description;
 

@@ -7,14 +7,23 @@ import java.util.List;
 
 public interface IJobService {
 
-    public JobDTO createJob(JobDTO jobDto);
+    JobDTO createJob(JobDTO jobDto);
 
-    public void deleteJobById(long id);
+     void deleteJobById(long id);
 
-    public Job getJobById(long id);
+     Job getJobById(long id);
 
-    public List<Job> listAllJob();
+     List<Job> listAllJob();
 
-    public Job updateJob(long id, JobDTO updatedJob);
+     Job updateJob(long id, JobDTO updatedJob);
+
+
+     List<Job> searchJob(String keyword);
+
+     void savedJobs(Long jobId, Long jobSeekerId);
+
+     void removeSavedJob(Long jobId,Long jobSeekerId);
+
+    List<Job> getSavedJob(Long jobSeekerId);
 }
 

@@ -1,5 +1,6 @@
 package com.aitrich.JobPortalSystem.Entity;
 
+import com.aitrich.JobPortalSystem.DTO.JobDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,14 @@ public class JobSeeker {
     @Column(nullable = false)
     private String password;
 
+    @ManyToMany
+    @JoinTable(name="saved_jobs",
+               joinColumns = @JoinColumn(name = "job_seeker_id"),
+                inverseJoinColumns = @JoinColumn(name = "job_id"))
+    private List<Job> savedJobs;
+
     private String resumeUrl;
+
     private String photoUrl;
 
     @ElementCollection

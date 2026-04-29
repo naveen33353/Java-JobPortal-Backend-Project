@@ -20,9 +20,13 @@ public class JobDTO {
     @NotNull(message = "Description must be required!")
     private String description;
 
+    @NotNull(message = "Title must be required")
+    private String title;
+
     private LocalDate postedDate;
 
     private LocalDate endDate;
+
 
     private List<String> skills;
 
