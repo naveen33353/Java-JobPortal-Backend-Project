@@ -3,6 +3,7 @@ package com.aitrich.JobPortalSystem.Service.Job;
 import com.aitrich.JobPortalSystem.DTO.JobDTO;
 import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Repository.IJobRepo;
+import com.aitrich.JobPortalSystem.Repository.IUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 public class JobServiceImpl implements IJobService {
 
     private final IJobRepo jobRepo;
+    private final IUserRepo userRepo;
     private final ModelMapper modelMapper;
 
     @Override

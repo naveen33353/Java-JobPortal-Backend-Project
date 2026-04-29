@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -145,4 +146,104 @@ class ApplicationServiceTest {
             verify(applicationRepo).deleteById(id);
         }
     }
+
+    @Nested
+    @DisplayName("Get all approved applications")
+    class GetAllApprovedApplicationsTest {
+
+        @Test
+        @DisplayName("Should return approved application")
+        void getAllApprovedApplicationsTest() {
+
+            List<Application> application = new ArrayList<>();
+
+            when(applicationRepo.findByStatus()).thenReturn(application);
+
+            List<Application> actualResult =
+                    applicationService.getApprovedApplications();
+
+            assertNotNull(actualResult);
+            assertEquals(application, actualResult);
+
+            verify(applicationRepo).findByStatus();
+        }
+    }
+
+    @Nested
+    @DisplayName("Setting Status")
+    class SetStatusTest {
+
+        @Test
+        @DisplayName("Should be able to set Status")
+        void setStatusTest() {
+
+            Long id = application.getId();
+            String status = "APPROVED";
+
+            when(applicationRepo.findById(id)).thenReturn(Optional.of(application));
+            when(applicationRepo.save(application)).thenReturn(application);
+            when(modelMapper.map(application, ApplicationPostDTO.class)).thenReturn(dto);
+
+            ApplicationPostDTO actualResult = applicationService.setStatus(status , id);
+
+            assertNotNull(actualResult);
+            assertEquals(dto, actualResult);
+
+            verify(applicationRepo).findById(id);
+            verify(applicationRepo).save(application);
+            verify(modelMapper).map(application, ApplicationPostDTO.class);
+
+            assertEquals(Status.APPROVED, application.getStatus());
+        }
+    }
+
+    @Nested
+    @DisplayName("Search Application By Job ID")
+    class SearchApplicationByJobIdTest {
+
+        @Test
+        @DisplayName("Should return applications for given job id")
+        void searchApplicationByJobIdTest() {
+
+            Long jobId = 1L;
+            List<Application> applications = List.of(application);
+
+            when(applicationRepo.findByJobId(jobId)).thenReturn(applications);
+
+            List<Application> actualResult =
+                    applicationService.searchApplicationByJobId(jobId);
+
+            assertNotNull(actualResult);
+            assertEquals(1, actualResult.size());
+            assertEquals(application, actualResult.get(0));
+
+            verify(applicationRepo).findByJobId(jobId);
+        }
+    }
+
+    @Nested
+    @DisplayName("Search Application By Job Seeker ID")
+    class SearchApplicationByJobSeekerIdTest {
+
+        @Test
+        @DisplayName("Should return applications for given job seeker id")
+        void searchApplicationByJobSeekerIdTest() {
+
+            Long jobSeekerId = 1L;
+            List<Application> applications = List.of(application);
+
+            when(applicationRepo.findByJobSeekerId(jobSeekerId))
+                    .thenReturn(applications);
+
+            List<Application> actualResult =
+                    applicationService.searchApplicationByJobSeekerId(jobSeekerId);
+
+            assertNotNull(actualResult);
+            assertEquals(1, actualResult.size());
+            assertEquals(application, actualResult.get(0));
+
+            verify(applicationRepo).findByJobSeekerId(jobSeekerId);
+        }
+    }
+
 }

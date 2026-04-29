@@ -11,48 +11,48 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/Application")
+@RequestMapping("/api/applications")
 public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    @PostMapping("/")
+    @PostMapping("/api/applications")
     public ResponseEntity<ApplicationPostDTO> postApplication(@RequestBody ApplicationPostDTO applicationPostDTO) {
         return ResponseEntity.ok(applicationService.postApplication(applicationPostDTO));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/applications/{id}")
     public ResponseEntity<Application> getApplicationById(@PathVariable long id) {
         return ResponseEntity.ok(applicationService.getApplicationById(id));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/api/applications")
     public ResponseEntity<List<Application>> getAllApplications() {
         return ResponseEntity.ok(applicationService.getAllApplications());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/applications/{id}")
     public ResponseEntity<Application> updateApplication(@RequestBody ApplicationPostDTO applicationDTO, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.updateApplication(applicationDTO,id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/applications/{id}")
     public ResponseEntity<Void> deleteApplication(@PathVariable long id) {
         applicationService.deleteApplicationById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/job/{jobId}")
+    @GetMapping("/api/applications/job/{jobId}")
     public ResponseEntity<List<Application>> getApplicationsByJobId(@PathVariable long jobId) {
         return ResponseEntity.ok(applicationService.searchApplicationByJobId(jobId));
     }
 
-    @GetMapping("/jobseeker/{jbsId}")
-    public ResponseEntity<List<Application>> getApplicationByJobSeekerId(@PathVariable long jbsId){
-        return ResponseEntity.ok(applicationService.searchApplicationByJobSeekerId(jbsId));
+    @GetMapping("/api/applications/jobseeker/{jobId}")
+    public ResponseEntity<List<Application>> getApplicationByJobSeekerId(@PathVariable long jobId){
+        return ResponseEntity.ok(applicationService.searchApplicationByJobSeekerId(jobId));
     }
 
-    @PutMapping("/{id}/{status}")
+    @PutMapping("/api/applications/{id}/{status}")
     public ResponseEntity<ApplicationPostDTO> setStatus(@PathVariable String status, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.setStatus(status , id));
     }
