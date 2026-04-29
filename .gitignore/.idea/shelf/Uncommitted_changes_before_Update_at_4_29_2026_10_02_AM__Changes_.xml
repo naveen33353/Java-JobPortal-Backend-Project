@@ -1,0 +1,75 @@
+<changelist name="Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]" date="1777437177886" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 4/29/2026 10:02 AM [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Entity/Application.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Entity/Application.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/Application.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="JobPortalSystem/target/test-classes/com/aitrich/JobPortalSystem/Service/Application/ApplicationServiceTest$SetStatusTest.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/ApplicationServiceTest$SetStatusTest.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Service/JobSeeker/JobSeekerServiceImp.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Service/JobSeeker/JobSeekerServiceImp.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/JobSeekerServiceImp.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/JobController.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/JobController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/JobController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/JobSeekerController.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/JobSeekerController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/JobSeekerController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/DTO/JobSeekerResponseDTO.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/DTO/JobSeekerResponseDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/JobSeekerResponseDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Service/Application/ApplicationService.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Service/Application/ApplicationService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/ApplicationService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/CompanyController.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/CompanyController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/CompanyController.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Service/Job/JobServiceImpl.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Service/Job/JobServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/JobServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="JobPortalSystem/target/test-classes/com/aitrich/JobPortalSystem/Service/Application/ApplicationServiceTest$GetAllApprovedApplicationsTest.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/ApplicationServiceTest$GetAllApprovedApplicationsTest.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/DTO/JobSeekerRequestDTO.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/DTO/JobSeekerRequestDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/JobSeekerRequestDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/ApplicationController.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/ApplicationController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/ApplicationController.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="JobPortalSystem/target/test-classes/com/aitrich/JobPortalSystem/Service/Application/ApplicationServiceTest$SearchApplicationByJobIdTest.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/ApplicationServiceTest$SearchApplicationByJobIdTest.class" />
+  </binary>
+  <binary>
+    <option name="AFTER_PATH" value="JobPortalSystem/target/test-classes/com/aitrich/JobPortalSystem/Service/Application/ApplicationServiceTest$SearchApplicationByJobSeekerIdTest.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/ApplicationServiceTest$SearchApplicationByJobSeekerIdTest.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/AdminController.class" />
+    <option name="AFTER_PATH" value="JobPortalSystem/target/classes/com/aitrich/JobPortalSystem/Controller/AdminController.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2026_10_02_AM_[Changes]/AdminController.class" />
+  </binary>
+</changelist>
