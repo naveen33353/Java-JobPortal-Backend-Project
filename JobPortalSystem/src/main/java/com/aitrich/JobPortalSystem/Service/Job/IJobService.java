@@ -11,10 +11,10 @@ public interface IJobService {
 
     public void deleteJobById(long id);
 
-    public Job getJobById(long id);
+    public JobDTO getJobById(long id);
 
-    public List<Job> listAllJob();
+    public List<JobDTO> listAllJob();
 
-    public Job updateJob(long id, JobDTO updatedJob);
+    public JobDTO updateJob(long id, JobDTO updatedJob);
 }
 

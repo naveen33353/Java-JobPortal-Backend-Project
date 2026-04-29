@@ -22,13 +22,13 @@ public class Application {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "job_seeker_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "job_seeker_id", nullable = false)
+    //@Column(nullable = false)
     private JobSeeker jobSeeker;
 
     @ManyToOne
-    @JoinColumn(name = "job_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "job_id", nullable = false)
+    //@Column(nullable = false)
     private Job job;
 
     @Enumerated(EnumType.STRING)
