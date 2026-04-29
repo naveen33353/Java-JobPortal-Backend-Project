@@ -1,5 +1,6 @@
 package com.aitrich.JobPortalSystem.Service.Admin;
 
+import com.aitrich.JobPortalSystem.DTO.JobDTO;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.Job;
 
@@ -10,7 +11,7 @@ public interface IAdminService {
 
     void deleteJobSeeker(Long id);
 
-    List<Job>getAllJobs();
+    List<JobDTO>getAllJobs();
 
 
     public void deleteJob(Long id);

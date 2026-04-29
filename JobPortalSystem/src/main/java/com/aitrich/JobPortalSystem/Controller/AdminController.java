@@ -2,6 +2,7 @@ package com.aitrich.JobPortalSystem.Controller;
 
 
 
+import com.aitrich.JobPortalSystem.DTO.JobDTO;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Service.Admin.IAdminService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -21,13 +22,13 @@ public class AdminController {
 
     // JobSeekers
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/api/admin/jobseekers")
+   // @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/jobseekers")
     public ResponseEntity<List<JobSeekerResponseDTO>> getAllJobSeekers() {
         return ResponseEntity.ok(adminService.getAllJobSeekers());
     }
 
-    @DeleteMapping("/api/admin/jobseeker/{id}")
+    @DeleteMapping("/jobseeker/{id}")
     public ResponseEntity<String> deleteJobSeeker(@PathVariable Long id) {
         adminService.deleteJobSeeker(id);
         return ResponseEntity.ok("JobSeeker deleted successfully");
@@ -35,8 +36,8 @@ public class AdminController {
 
     //Jobs
 
-    @GetMapping("/api/admin/jobs")
-    public ResponseEntity<List<Job>> getAllJobs() {
+    @GetMapping("/jobs")
+    public ResponseEntity<List<JobDTO>> getAllJobs() {
         return ResponseEntity.ok(adminService.getAllJobs());
     }
 

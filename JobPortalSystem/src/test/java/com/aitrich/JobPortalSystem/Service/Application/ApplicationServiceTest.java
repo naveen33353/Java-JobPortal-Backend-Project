@@ -208,7 +208,7 @@ class ApplicationServiceTest {
             Long jobId = 1L;
             List<Application> applications = List.of(application);
 
-            when(applicationRepo.findByJobId(jobId)).thenReturn(applications);
+            when(applicationRepo.findByJob_JobId(jobId)).thenReturn(applications);
 
             List<Application> actualResult =
                     applicationService.searchApplicationByJobId(jobId);
@@ -217,7 +217,7 @@ class ApplicationServiceTest {
             assertEquals(1, actualResult.size());
             assertEquals(application, actualResult.get(0));
 
-            verify(applicationRepo).findByJobId(jobId);
+            verify(applicationRepo).findByJob_JobId(jobId);
         }
     }
 
@@ -232,7 +232,7 @@ class ApplicationServiceTest {
             Long jobSeekerId = 1L;
             List<Application> applications = List.of(application);
 
-            when(applicationRepo.findByJobSeekerId(jobSeekerId))
+            when(applicationRepo.findByJobSeeker_Id(jobSeekerId))
                     .thenReturn(applications);
 
             List<Application> actualResult =
@@ -242,7 +242,7 @@ class ApplicationServiceTest {
             assertEquals(1, actualResult.size());
             assertEquals(application, actualResult.get(0));
 
-            verify(applicationRepo).findByJobSeekerId(jobSeekerId);
+            verify(applicationRepo).findByJobSeeker_Id(jobSeekerId);
         }
     }
 
