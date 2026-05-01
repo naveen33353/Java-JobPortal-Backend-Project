@@ -2,6 +2,7 @@ package com.aitrich.JobPortalSystem.Entity;
 
 import com.aitrich.JobPortalSystem.Entity.Company;
 import com.aitrich.JobPortalSystem.Enums.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class Application {
     private JobSeeker jobSeeker;
 
     @ManyToOne
-    @JoinColumn(name = "job_id", nullable = false)
+    @JoinColumn(name = "job_id"/* ,nullable = false */)
     //@Column(nullable = false)
     private Job job;
 
