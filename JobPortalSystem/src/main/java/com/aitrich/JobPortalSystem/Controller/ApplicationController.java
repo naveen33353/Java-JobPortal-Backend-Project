@@ -1,7 +1,7 @@
 package com.aitrich.JobPortalSystem.Controller;
 
 import com.aitrich.JobPortalSystem.DTO.ApplicationPostDTO;
-import com.aitrich.JobPortalSystem.Entity.Application;
+import com.aitrich.JobPortalSystem.DTO.ApplicationResponseDTO;
 import com.aitrich.JobPortalSystem.Service.Application.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,38 +22,42 @@ public class ApplicationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Application> getApplicationById(@PathVariable long id) {
+    public ResponseEntity<ApplicationResponseDTO> getApplicationById(@PathVariable long id) {
         return ResponseEntity.ok(applicationService.getApplicationById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Application>> getAllApplications() {
+    public ResponseEntity<List<ApplicationResponseDTO>> getAllApplications() {
         return ResponseEntity.ok(applicationService.getAllApplications());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Application> updateApplication(@RequestBody ApplicationPostDTO applicationDTO, @PathVariable long id) {
+    public ResponseEntity<ApplicationResponseDTO> updateApplication(@RequestBody ApplicationPostDTO applicationDTO, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.updateApplication(applicationDTO,id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteApplication(@PathVariable long id) {
+    public ResponseEntity<String> deleteApplication(@PathVariable long id) {
         applicationService.deleteApplicationById(id);
-        return ResponseEntity.noContent().build();
-    }
+        return ResponseEntity.ok("Deleted successfully");    }
 
     @GetMapping("/job/{jobId}")
-    public ResponseEntity<List<Application>> getApplicationsByJobId(@PathVariable long jobId) {
+    public ResponseEntity<List<ApplicationResponseDTO>> getApplicationsByJobId(@PathVariable long jobId) {
         return ResponseEntity.ok(applicationService.searchApplicationByJobId(jobId));
     }
 
     @GetMapping("/jobseeker/{jobId}")
-    public ResponseEntity<List<Application>> getApplicationByJobSeekerId(@PathVariable long jobId){
+    public ResponseEntity<List<ApplicationResponseDTO>> getApplicationByJobSeekerId(@PathVariable long jobId){
         return ResponseEntity.ok(applicationService.searchApplicationByJobSeekerId(jobId));
     }
 
     @PutMapping("/{id}/{status}")
     public ResponseEntity<ApplicationPostDTO> setStatus(@PathVariable String status, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.setStatus(status , id));
+    }
+
+    @GetMapping("/approved")
+    public ResponseEntity<List<ApplicationResponseDTO>> getApplicationsByApproved() {
+        return ResponseEntity.ok(applicationService.getApprovedApplications());
     }
 }

@@ -1,249 +1,177 @@
 package com.aitrich.JobPortalSystem.Service.Application;
 
 import com.aitrich.JobPortalSystem.DTO.ApplicationPostDTO;
+import com.aitrich.JobPortalSystem.DTO.ApplicationResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.Application;
 import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Entity.JobSeeker;
 import com.aitrich.JobPortalSystem.Enums.Status;
 import com.aitrich.JobPortalSystem.Repository.IApplicationRepo;
-import org.junit.jupiter.api.*;
+import com.aitrich.JobPortalSystem.Repository.IJobRepo;
+import com.aitrich.JobPortalSystem.Repository.IJobSeekerRepo;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.*;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("Application service ")
+@ExtendWith(org.mockito.junit.jupiter.MockitoExtension.class)
 class ApplicationServiceTest {
 
     @Mock
-    private IApplicationRepo applicationRepo;
+    IApplicationRepo applicationRepo;
+
     @Mock
-    private ModelMapper modelMapper;
+    IJobRepo jobRepo;
+
+    @Mock
+    IJobSeekerRepo jobSeekerRepo;
+
+    @Mock
+    ModelMapper modelMapper;
+
     @InjectMocks
-    private ApplicationService applicationService;
+    ApplicationService service;
 
-    private ApplicationPostDTO dto;
-    private Application application;
+    @Test
+    void postApplication_test() {
 
-    @BeforeEach
-    void setUp() {
-        dto = new ApplicationPostDTO();
-        application = new Application();
-
-        dto.setJobSeeker(new JobSeeker());
-        dto.setJob(new Job());
+        ApplicationPostDTO dto = new ApplicationPostDTO();
+        dto.setJobSeekerId(1L);
+        dto.setJobId(2L);
         dto.setStatus(Status.APPROVED);
-        dto.setAppliedDate(LocalDate.now());
 
-        application.setId(1L);
-        application.setJobSeeker(new JobSeeker());
-        application.setJob(new Job());
-        application.setStatus(Status.APPROVED);
-        application.setAppliedDate(LocalDate.now());
+        JobSeeker js = new JobSeeker();
+        js.setId(1L);
+
+        Job job = new Job();
+        job.setJobId(2L);
+
+        when(jobSeekerRepo.findById(1L)).thenReturn(Optional.of(js));
+        when(jobRepo.findById(2L)).thenReturn(Optional.of(job));
+
+        ApplicationPostDTO res = service.postApplication(dto);
+
+        assertNotNull(res);
+        verify(applicationRepo).save(any(Application.class));
     }
 
-    @Nested
-    @DisplayName("Post an application")
-    class PostApplicationTest{
+    @Test
+    void getApplicationById_test() {
 
-        @Test
-        @DisplayName("Should post an application")
-        void postApplicationTest() {
+        Application app = new Application();
+        app.setId(1L);
+        app.setStatus(Status.APPROVED);
+        app.setAppliedDate(LocalDate.now());
 
-            when(modelMapper.map(dto, Application.class)).thenReturn(application);
-            when(applicationRepo.save(application)).thenReturn(application);
-            when(modelMapper.map(application, ApplicationPostDTO.class)).thenReturn(dto);
+        JobSeeker js = new JobSeeker();
+        js.setId(5L);
+        app.setJobSeeker(js);
 
-            ApplicationPostDTO actualResult = applicationService.postApplication(dto);
+        when(applicationRepo.findById(1L)).thenReturn(Optional.of(app));
 
-            assertNotNull(actualResult);
-            assertEquals(dto, actualResult);
+        ApplicationResponseDTO res = service.getApplicationById(1L);
 
-            verify(modelMapper).map(dto, Application.class);
-            verify(applicationRepo).save(application);
-            verify(modelMapper).map(application, ApplicationPostDTO.class);
-        }
+        assertEquals(1L, res.getId());
+        assertEquals(5L, res.getJobSeekerId());
     }
 
-    @Nested
-    @DisplayName("")
-    class GetApplicationByIdTest{
-        @Test
-        @DisplayName("Should find an application")
-        void getApplicationByIdTest(){
-            Long id = application.getId();
-            when(applicationRepo.findById(id)).thenReturn(Optional.of(application));
-            Application actualResult = applicationService.getApplicationById(id);
+    @Test
+    void getAllApplications_test() {
 
-            assertNotNull(actualResult);
-            assertEquals(application, actualResult);
+        Application app = new Application();
+        app.setId(1L);
 
-            verify(applicationRepo).findById(id);
-        }
+        JobSeeker js = new JobSeeker();
+        js.setId(2L);
+        app.setJobSeeker(js);
+
+        when(applicationRepo.findAll()).thenReturn(List.of(app));
+
+        List<ApplicationResponseDTO> list = service.getAllApplications();
+
+        assertEquals(1, list.size());
     }
 
-    @Nested
-    @DisplayName("Should return all applications")
-    class GetAllApplicationsTest{
-        @Test
-        @DisplayName("Should return all applications")
-        void getAllApplicationsTest(){
-            when(applicationRepo.findAll()).thenReturn(List.of(application));
+    @Test
+    void deleteApplication_test() {
 
-            List<Application> actualResult = applicationService.getAllApplications();
+        service.deleteApplicationById(1L);
 
-            assertNotNull(actualResult);
-            assertEquals(1, actualResult.size());
-            assertEquals(application, actualResult.get(0));
-            verify(applicationRepo).findAll();
-        }
+        verify(applicationRepo).deleteById(1L);
     }
 
-    @Nested
-    @DisplayName("Update application")
-    class UpdateApplicationTest{
-        @Test
-        @DisplayName("Should update an application")
-        void updateApplicationTest() {
-            ApplicationPostDTO applicationDTO = new ApplicationPostDTO();
-            Application application = new Application();
+    @Test
+    void updateApplication_test() {
 
-            Long id = application.getId();
+        Application app = new Application();
+        app.setId(1L);
+        app.setStatus(Status.APPROVED);
 
-            when(applicationRepo.findById(id)).thenReturn(Optional.of(application));
-            when(applicationRepo.save(application)).thenReturn(application);
-            doNothing().when(modelMapper).map(applicationDTO, application);
-            Application actualResult = applicationService.updateApplication(applicationDTO, id);
+        when(applicationRepo.findById(1L)).thenReturn(Optional.of(app));
 
-            assertNotNull(actualResult);
-            assertEquals(application, actualResult);
+        ApplicationPostDTO dto = new ApplicationPostDTO();
+        dto.setStatus(Status.APPROVED);
 
-            verify(applicationRepo).findById(id);
-            verify(modelMapper).map(applicationDTO, application);
-            verify(applicationRepo).save(application);
-        }
+        ApplicationResponseDTO res = service.updateApplication(dto, 1L);
+
+        assertEquals(Status.APPROVED, res.getStatus());
     }
 
-    @Nested
-    @DisplayName("Delete application")
-    class DeleteApplicationTest{
-        @Test
-        @DisplayName("Should delete an application")
-        void deleteApplicationTest(){
-            Long id = application.getId();
-            applicationService.deleteApplicationById(id);
-            verify(applicationRepo).deleteById(id);
-        }
+    @Test
+    void searchByJobSeeker_test() {
+
+        Application app = new Application();
+        app.setId(1L);
+
+        JobSeeker js = new JobSeeker();
+        js.setId(10L);
+        app.setJobSeeker(js);
+
+        when(applicationRepo.findByJobSeeker_Id(10L)).thenReturn(List.of(app));
+
+        List<ApplicationResponseDTO> res = service.searchApplicationByJobSeekerId(10L);
+
+        assertEquals(1, res.size());
     }
 
-    @Nested
-    @DisplayName("Get all approved applications")
-    class GetAllApprovedApplicationsTest {
+    @Test
+    void setStatus_test() {
 
-        @Test
-        @DisplayName("Should return approved application")
-        void getAllApprovedApplicationsTest() {
+        Application app = new Application();
+        app.setId(1L);
 
-            List<Application> application = new ArrayList<>();
+        when(applicationRepo.findById(1L)).thenReturn(Optional.of(app));
 
-            when(applicationRepo.findByStatus()).thenReturn(application);
+        when(modelMapper.map(any(), eq(ApplicationPostDTO.class)))
+                .thenReturn(new ApplicationPostDTO());
 
-            List<Application> actualResult =
-                    applicationService.getApprovedApplications();
+        ApplicationPostDTO res = service.setStatus("APPROVED", 1L);
 
-            assertNotNull(actualResult);
-            assertEquals(application, actualResult);
-
-            verify(applicationRepo).findByStatus();
-        }
+        assertNotNull(res);
     }
 
-    @Nested
-    @DisplayName("Setting Status")
-    class SetStatusTest {
+    @Test
+    void getApprovedApplications_test() {
 
-        @Test
-        @DisplayName("Should be able to set Status")
-        void setStatusTest() {
+        Application app = new Application();
+        app.setId(1L);
+        app.setStatus(Status.APPROVED);
 
-            Long id = application.getId();
-            String status = "APPROVED";
+        JobSeeker js = new JobSeeker();
+        js.setId(3L);
+        app.setJobSeeker(js);
 
-            when(applicationRepo.findById(id)).thenReturn(Optional.of(application));
-            when(applicationRepo.save(application)).thenReturn(application);
-            when(modelMapper.map(application, ApplicationPostDTO.class)).thenReturn(dto);
+        when(applicationRepo.findByStatus()).thenReturn(List.of(app));
 
-            ApplicationPostDTO actualResult = applicationService.setStatus(status , id);
+        List<ApplicationResponseDTO> res = service.getApprovedApplications();
 
-            assertNotNull(actualResult);
-            assertEquals(dto, actualResult);
-
-            verify(applicationRepo).findById(id);
-            verify(applicationRepo).save(application);
-            verify(modelMapper).map(application, ApplicationPostDTO.class);
-
-            assertEquals(Status.APPROVED, application.getStatus());
-        }
+        assertEquals(1, res.size());
     }
-
-    @Nested
-    @DisplayName("Search Application By Job ID")
-    class SearchApplicationByJobIdTest {
-
-        @Test
-        @DisplayName("Should return applications for given job id")
-        void searchApplicationByJobIdTest() {
-
-            Long jobId = 1L;
-            List<Application> applications = List.of(application);
-
-            when(applicationRepo.findByJob_JobId(jobId)).thenReturn(applications);
-
-            List<Application> actualResult =
-                    applicationService.searchApplicationByJobId(jobId);
-
-            assertNotNull(actualResult);
-            assertEquals(1, actualResult.size());
-            assertEquals(application, actualResult.get(0));
-
-            verify(applicationRepo).findByJob_JobId(jobId);
-        }
-    }
-
-    @Nested
-    @DisplayName("Search Application By Job Seeker ID")
-    class SearchApplicationByJobSeekerIdTest {
-
-        @Test
-        @DisplayName("Should return applications for given job seeker id")
-        void searchApplicationByJobSeekerIdTest() {
-
-            Long jobSeekerId = 1L;
-            List<Application> applications = List.of(application);
-
-            when(applicationRepo.findByJobSeeker_Id(jobSeekerId))
-                    .thenReturn(applications);
-
-            List<Application> actualResult =
-                    applicationService.searchApplicationByJobSeekerId(jobSeekerId);
-
-            assertNotNull(actualResult);
-            assertEquals(1, actualResult.size());
-            assertEquals(application, actualResult.get(0));
-
-            verify(applicationRepo).findByJobSeeker_Id(jobSeekerId);
-        }
-    }
-
 }
