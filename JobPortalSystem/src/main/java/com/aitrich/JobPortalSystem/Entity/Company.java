@@ -1,5 +1,7 @@
 package com.aitrich.JobPortalSystem.Entity;
 
+import com.aitrich.JobPortalSystem.DTO.JobDTO;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +24,7 @@ public class Company {
     private String companyName;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+
     private List<Job> jobs;
 
     @Column(unique = true, nullable = false)

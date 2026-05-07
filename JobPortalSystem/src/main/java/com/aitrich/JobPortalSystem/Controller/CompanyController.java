@@ -1,69 +1,44 @@
 package com.aitrich.JobPortalSystem.Controller;
 
-import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Service.Company.ICompanyService;
+import com.aitrich.JobPortalSystem.Entity.Company;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.aitrich.JobPortalSystem.Entity.Company;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/company")
+@RequestMapping("/api/companies")
 @RequiredArgsConstructor
 public class CompanyController {
 
+    private final ICompanyService service;
 
-    private  final ICompanyService service;
+    @PostMapping
+    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
+        return ResponseEntity.ok(service.saveCompany(company));
+    }
 
-        @PreAuthorize("hasRole('COMPANY')")
-        @PostMapping("/api/companies")
-        public Company createCompany (@RequestBody Company company){
+    @GetMapping
+    public ResponseEntity<List<Company>> getAllCompanies() {
+        return ResponseEntity.ok(service.getAllCompanies());
+    }
 
-            return service.saveCompany(company);
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getCompanyById(id));
+    }
 
-        @GetMapping("/api/companies")
-        public List<Company> getAllCompanies () {
+    @PutMapping("/{id}")
+    public ResponseEntity<Company> updateCompany(@PathVariable Long id,
+                                                 @RequestBody Company company) {
+        return ResponseEntity.ok(service.updateCompany(id, company));
+    }
 
-            return service.getAllCompanies();
-            }
-
-            @GetMapping("/api/companies/{id}")
-            public Company getCompanyById (@PathVariable Long id){
-
-                    return service.getCompanyById(id);
-                }
-
-                @PutMapping("/api/companies/{id}")
-                public Company updateCompany (@PathVariable Long id,
-                        @RequestBody Company company){
-                    return service.updateCompany(id, company);
-                }
-
-                @DeleteMapping("/api/companies/{id}")
-                public String deleteCompany (@PathVariable Long id){
-
-                return service.deleteCompany(id);
-                }
-
-                @GetMapping("/{id}/jobs")
-                public List<Job> getCompanyJobs(@PathVariable Long id){
-                    return service.getJobsByCompanyId(id);
-                }
-
-                @GetMapping("/search")
-                public List<Company> searchCompanies(
-                        @RequestParam(required = false) String name,
-                        @RequestParam(required = false) String location) {
-                    return service.searchCompanies(name, location);
-                }
-        }
-
-
-
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCompany(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deleteCompany(id));
+    }
+}

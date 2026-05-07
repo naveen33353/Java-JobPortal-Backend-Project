@@ -1,5 +1,7 @@
 package com.aitrich.JobPortalSystem.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +23,7 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+
     private Company company;
 
     @Column(name = "Job_Description")
@@ -37,7 +40,7 @@ public class Job {
     @ElementCollection
     private List<String> skills;
 
-    private String Experience;
+    private String experience;
 
     private double salary;
 

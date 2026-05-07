@@ -12,36 +12,40 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/Job")
+@RequestMapping("/api/jobs")
 public class JobController {
 
-    private final JobServiceImpl jobSerive;
+    private final JobServiceImpl jobService;
 
-    @PostMapping("/api/jobs")
-    public ResponseEntity<JobDTO> postJob(@RequestBody JobDTO jobDto){
-        return ResponseEntity.ok(jobSerive.createJob(jobDto));
+    // 🔥 CREATE
+    @PostMapping
+    public ResponseEntity<JobDTO> postJob(@RequestBody JobDTO jobDto) {
+        return ResponseEntity.ok(jobService.createJob(jobDto));
     }
 
-    @GetMapping("/api/jobs/{id}")
-    public ResponseEntity<Job> getJobById(@PathVariable long id) {
-        return ResponseEntity.ok(jobSerive.getJobById(id));
+    // 🔥 GET BY ID
+    @GetMapping("/{id}")
+    public ResponseEntity<JobDTO> getJobById(@PathVariable long id) {
+        return ResponseEntity.ok(jobService.getJobById(id));
     }
 
-    @GetMapping("/api/jobs/")
-    public ResponseEntity<List<Job>> getAllJobs() {
-        return ResponseEntity.ok(jobSerive.listAllJob());
+    // 🔥 GET ALL
+    @GetMapping
+    public ResponseEntity<List<JobDTO>> getAllJobs() {
+        return ResponseEntity.ok(jobService.listAllJob());
     }
 
-    @PutMapping("/api/jobs/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable long id, @RequestBody JobDTO job) {
-
-        return ResponseEntity.ok(jobSerive.updateJob(id,job));
+    // 🔥 UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<JobDTO> updateJob(@PathVariable long id,
+                                            @RequestBody JobDTO jobDto) {
+        return ResponseEntity.ok(jobService.updateJob(id, jobDto));
     }
 
-    @DeleteMapping("/api/jobs/{id}")
+    // 🔥 DELETE
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJobById(@PathVariable long id) {
-        jobSerive.deleteJobById(id);
+        jobService.deleteJobById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

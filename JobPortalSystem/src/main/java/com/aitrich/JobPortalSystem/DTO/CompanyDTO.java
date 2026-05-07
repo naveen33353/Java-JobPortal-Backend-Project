@@ -1,23 +1,16 @@
 package com.aitrich.JobPortalSystem.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class CompanyDTO {
 
     private Long id;
-
-    private String companyName;
-
+    private String CompanyName;
     private String email;
-
     private String website;
-
     private String location;
-
     private String description;
+
+    private List<JobDTO> jobs;
+
 }

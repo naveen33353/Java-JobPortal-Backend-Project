@@ -13,22 +13,14 @@ import java.util.List;
 @Setter
 @Getter
 public class JobDTO {
-
-    @NotNull(message = "Company name should not be blank!")
-    private Company company;
-
-    @NotNull(message = "Description must be required!")
+    private Long jobId;
     private String description;
-
     private LocalDate postedDate;
-
     private LocalDate endDate;
-
     private List<String> skills;
-
     private String experience;
+    private Double salary;
 
-    private double salary;
-
-
+    private Long companyId;
+    private String companyName;
 }

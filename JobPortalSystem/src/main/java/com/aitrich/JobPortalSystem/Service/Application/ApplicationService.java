@@ -54,7 +54,7 @@ public class ApplicationService implements IApplicationService {
     @Override
     public List<Application> searchApplicationByJobSeekerId(Long id) {
 
-        List<Application> applications = applicationRepo.findByJobSeekerId(id);
+        List<Application> applications = applicationRepo.findByJobSeeker_Id(id);
 
         if (applications.isEmpty()) {
             throw new RuntimeException("No Application found with job seeker id " + id);
@@ -66,7 +66,7 @@ public class ApplicationService implements IApplicationService {
     @Override
     public List<Application> searchApplicationByJobId(Long id) {
 
-        List<Application> applications = applicationRepo.findByJobId(id);
+        List<Application> applications = applicationRepo.findByJob_JobId(id);
 
         if (applications.isEmpty()) {
             throw new RuntimeException("No Application found with job id " + id);
