@@ -38,6 +38,7 @@ public class JobServiceImpl implements IJobService {
         job.setPostedDate(LocalDate.now());
         job.setEndDate(jobDto.getEndDate());
 
+
         Job savedJob = jobRepo.save(job);
         return mapToDTO(savedJob);
     }

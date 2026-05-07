@@ -1,5 +1,6 @@
 package com.aitrich.JobPortalSystem.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class JobSeeker {
     private String location;
 
     @OneToMany(mappedBy = "jobSeeker", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Application> applications = new ArrayList<>();
 }
 

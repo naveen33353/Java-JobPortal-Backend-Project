@@ -1,9 +1,6 @@
 package com.aitrich.JobPortalSystem.DTO;
 
-import com.aitrich.JobPortalSystem.Entity.Job;
-import com.aitrich.JobPortalSystem.Entity.JobSeeker;
 import com.aitrich.JobPortalSystem.Enums.Status;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,11 +15,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ApplicationPostDTO {
 
-    @NotNull(message = "Job seeker should not be blank!")
-    private JobSeeker jobSeeker;
+    @NotNull(message = "Job seeker ID should not be null!")
+    private Long jobSeekerId;
 
-    @NotNull(message = "Job should not be blank!")
-    private Job job;
+    private Long jobId;
 
     private Status status;
 
