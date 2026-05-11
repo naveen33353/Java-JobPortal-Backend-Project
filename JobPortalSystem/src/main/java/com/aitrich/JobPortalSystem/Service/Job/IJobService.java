@@ -1,20 +1,28 @@
 package com.aitrich.JobPortalSystem.Service.Job;
 
-import com.aitrich.JobPortalSystem.DTO.JobDTO;
-import com.aitrich.JobPortalSystem.Entity.Job;
+import com.aitrich.JobPortalSystem.DTO.JobRequestDTO;
+import com.aitrich.JobPortalSystem.DTO.JobResponseDTO;
 
 import java.util.List;
 
 public interface IJobService {
 
-    public JobDTO createJob(JobDTO jobDto);
+    public JobResponseDTO createJob(JobRequestDTO jobDto);
 
     public void deleteJobById(long id);
 
-    public JobDTO getJobById(long id);
+    public JobResponseDTO getJobById(long id);
 
-    public List<JobDTO> listAllJob();
+    public List<JobResponseDTO> listAllJob();
 
-    public JobDTO updateJob(long id, JobDTO updatedJob);
+    public JobResponseDTO updateJob(long id, JobRequestDTO updatedJob);
+
+    public List<JobResponseDTO > searchJob(String keyword);
+
+    public void saveAJobToProfile(Long jobId, Long jobSeekerId);
+
+    public void removeSavedJobFromProfile(Long jobId, Long jobSeekerId);
+
+    public List<JobResponseDTO> getSavedJobFromProfile(Long jobSeekerId);
 }
 

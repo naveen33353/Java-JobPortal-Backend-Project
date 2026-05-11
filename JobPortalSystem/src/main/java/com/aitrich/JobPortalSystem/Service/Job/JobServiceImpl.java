@@ -1,18 +1,18 @@
 package com.aitrich.JobPortalSystem.Service.Job;
 
-import com.aitrich.JobPortalSystem.DTO.JobDTO;
+import com.aitrich.JobPortalSystem.DTO.JobRequestDTO;
+import com.aitrich.JobPortalSystem.DTO.JobResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.Company;
 import com.aitrich.JobPortalSystem.Entity.Job;
+import com.aitrich.JobPortalSystem.Entity.JobSeeker;
 import com.aitrich.JobPortalSystem.Repository.ICompanyRepo;
 import com.aitrich.JobPortalSystem.Repository.IJobRepo;
-import com.aitrich.JobPortalSystem.Repository.IUserRepo;
+import com.aitrich.JobPortalSystem.Repository.IJobSeekerRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,57 +21,61 @@ public class JobServiceImpl implements IJobService {
 
     private final IJobRepo jobRepo;
     private final ICompanyRepo companyRepo;
+    private final ModelMapper modelMapper;
+    private final IJobSeekerRepo jobSeekerRepo;
 
 
     @Override
-    public JobDTO createJob(JobDTO jobDto) {
+    public JobResponseDTO createJob(JobRequestDTO jobDto) {
 
-        Company company = companyRepo.findById(jobDto.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
-
-        Job job = new Job();
-        job.setCompany(company);
-        job.setDescription(jobDto.getDescription());
-        job.setSkills(jobDto.getSkills());
-        job.setExperience(jobDto.getExperience());
-        job.setSalary(jobDto.getSalary());
+        Job job = modelMapper.map(jobDto, Job.class);
         job.setPostedDate(LocalDate.now());
-        job.setEndDate(jobDto.getEndDate());
+        Company company = companyRepo.findById(jobDto.getCompanyId())
+                .orElseThrow(() -> new RuntimeException( "company not found"));
+        job.setCompany(company);
+        jobRepo.save(job);
 
+        JobResponseDTO response = modelMapper.map(job, JobResponseDTO.class);
+        response.setCompanyName(company.getCompanyName());
 
-        Job savedJob = jobRepo.save(job);
-        return mapToDTO(savedJob);
+        return response;
     }
 
 
     @Override
-    public JobDTO getJobById(long id) {
+    public JobResponseDTO getJobById(long id) {
         Job job = jobRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
+        Company company = companyRepo.findById(job.getCompany().getId())
+                .orElseThrow(() -> new RuntimeException( "company not found"));
 
-        return mapToDTO(job);
+        JobResponseDTO jobDTO =modelMapper.map(job, JobResponseDTO.class);
+        jobDTO.setCompanyName(company.getCompanyName());
+
+
+        return jobDTO;
     }
 
 
     @Override
-    public List<JobDTO> listAllJob() {
+    public List<JobResponseDTO> listAllJob() {
         return jobRepo.findAll()
                 .stream()
-                .map(this::mapToDTO)
+                .map(this::convertToDTO)
                 .toList();
     }
 
 
     @Override
-    public JobDTO updateJob(long id, JobDTO jobDto) {
+    public JobResponseDTO updateJob(long id, JobRequestDTO jobDto) {
 
         Job existing = jobRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
 
         Company company = companyRepo.findById(jobDto.getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Company not found"));
-
         existing.setCompany(company);
+
         existing.setDescription(jobDto.getDescription());
         existing.setSkills(jobDto.getSkills());
         existing.setExperience(jobDto.getExperience());
@@ -80,7 +84,7 @@ public class JobServiceImpl implements IJobService {
 
         jobRepo.save(existing);
 
-        return mapToDTO(existing);
+        return convertToDTO(existing);
     }
 
 
@@ -90,19 +94,59 @@ public class JobServiceImpl implements IJobService {
     }
 
 
-    private JobDTO mapToDTO(Job job) {
-        JobDTO dto = new JobDTO();
+    private JobResponseDTO convertToDTO(Job job) {
+        JobResponseDTO dto = modelMapper.map(job, JobResponseDTO.class);
 
-        dto.setJobId(job.getJobId());
-        dto.setCompanyId(job.getCompany().getId());
-        dto.setCompanyName(job.getCompany().getCompanyName());
-        dto.setDescription(job.getDescription());
-        dto.setPostedDate(job.getPostedDate());
-        dto.setEndDate(job.getEndDate());
-        dto.setSkills(job.getSkills());
-        dto.setExperience(job.getExperience());
-        dto.setSalary(job.getSalary());
+        if (job.getCompany() != null) {
 
-        return dto;
+            dto.setCompanyName(job.getCompany().getCompanyName());
+            return dto;
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<JobResponseDTO> searchJob(String keyword){
+
+    return  jobRepo.searchJobs(keyword)
+                        .stream()
+                        .map(this::convertToDTO)
+                        .toList();
+    }
+
+    @Override
+    public void saveAJobToProfile(Long jobId, Long jobSeekerId){
+        JobSeeker jobSeeker = jobSeekerRepo.findById(jobSeekerId)
+                .orElseThrow(() -> new RuntimeException("JobSeeker not found with id"+jobSeekerId));
+        Job job = jobRepo.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not Found with id "+jobId));
+
+        if(!jobSeeker.getSavedJobs().contains(job)){
+            jobSeeker.getSavedJobs().add(job);
+        }
+    }
+
+    @Override
+    public void removeSavedJobFromProfile(Long jobId, Long jobSeekerId){
+        JobSeeker jobseeker = jobSeekerRepo.findById(jobSeekerId)
+                .orElseThrow(() -> new RuntimeException("JobSeeker not found with id "+jobSeekerId ));
+
+        Job job = jobRepo.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found with id " + jobId));
+        jobseeker.getSavedJobs().remove(job);
+    }
+
+    @Override
+    public List<JobResponseDTO> getSavedJobFromProfile(Long jobSeekerId){
+
+        JobSeeker jobSeeker = jobSeekerRepo.findById(jobSeekerId)
+                .orElseThrow(() -> new RuntimeException("JobSeeker not found with id" + jobSeekerId));
+
+         return  jobSeeker.getSavedJobs()
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 }
+

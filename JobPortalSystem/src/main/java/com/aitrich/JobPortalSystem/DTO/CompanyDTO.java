@@ -12,6 +12,6 @@ public class CompanyDTO {
         private String location;
         private String description;
 
-        private List<JobDTO> jobs;
+        private List<JobRequestDTO> jobs;
 
 }

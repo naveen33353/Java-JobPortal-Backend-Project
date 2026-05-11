@@ -47,6 +47,9 @@ public class JobSeeker {
     @OneToMany(mappedBy = "jobSeeker", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Application> applications = new ArrayList<>();
+
+    @ElementCollection
+    private List<Job> savedJobs;
 }
 
 

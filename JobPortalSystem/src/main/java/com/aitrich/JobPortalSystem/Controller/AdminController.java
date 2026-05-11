@@ -2,13 +2,12 @@ package com.aitrich.JobPortalSystem.Controller;
 
 
 
-import com.aitrich.JobPortalSystem.DTO.JobDTO;
+import com.aitrich.JobPortalSystem.DTO.JobRequestDTO;
+import com.aitrich.JobPortalSystem.DTO.JobResponseDTO;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerResponseDTO;
-import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Service.Admin.IAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class AdminController {
     //Jobs
 
     @GetMapping("/jobs")
-    public ResponseEntity<List<JobDTO>> getAllJobs() {
+    public ResponseEntity<List<JobResponseDTO>> getAllJobs() {
         return ResponseEntity.ok(adminService.getAllJobs());
     }
 

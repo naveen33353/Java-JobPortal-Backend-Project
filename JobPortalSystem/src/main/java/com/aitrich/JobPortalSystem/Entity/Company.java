@@ -1,7 +1,5 @@
 package com.aitrich.JobPortalSystem.Entity;
 
-import com.aitrich.JobPortalSystem.DTO.JobDTO;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

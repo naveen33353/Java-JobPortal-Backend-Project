@@ -1,8 +1,8 @@
 package com.aitrich.JobPortalSystem.Service.Admin;
 
-import com.aitrich.JobPortalSystem.DTO.JobDTO;
+import com.aitrich.JobPortalSystem.DTO.JobRequestDTO;
+import com.aitrich.JobPortalSystem.DTO.JobResponseDTO;
 import com.aitrich.JobPortalSystem.DTO.JobSeekerResponseDTO;
-import com.aitrich.JobPortalSystem.Entity.Job;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface IAdminService {
 
     void deleteJobSeeker(Long id);
 
-    List<JobDTO>getAllJobs();
+    public List<JobResponseDTO>getAllJobs();
 
 
     public void deleteJob(Long id);
