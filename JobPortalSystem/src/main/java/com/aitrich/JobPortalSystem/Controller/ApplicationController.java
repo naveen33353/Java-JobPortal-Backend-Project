@@ -5,6 +5,7 @@ import com.aitrich.JobPortalSystem.DTO.ApplicationResponseDTO;
 import com.aitrich.JobPortalSystem.Service.Application.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @PostMapping
     public ResponseEntity<ApplicationPostDTO> postApplication(@RequestBody ApplicationPostDTO applicationPostDTO) {
         return ResponseEntity.ok(applicationService.postApplication(applicationPostDTO));
@@ -41,16 +43,19 @@ public class ApplicationController {
         applicationService.deleteApplicationById(id);
         return ResponseEntity.ok("Deleted successfully");    }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @GetMapping("/job/{jobId}")
     public ResponseEntity<List<ApplicationResponseDTO>> getApplicationsByJobId(@PathVariable long jobId) {
         return ResponseEntity.ok(applicationService.searchApplicationByJobId(jobId));
     }
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @GetMapping("/jobseeker/{jobId}")
     public ResponseEntity<List<ApplicationResponseDTO>> getApplicationByJobSeekerId(@PathVariable long jobId){
         return ResponseEntity.ok(applicationService.searchApplicationByJobSeekerId(jobId));
     }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @PutMapping("/{id}/{status}")
     public ResponseEntity<ApplicationPostDTO> setStatus(@PathVariable String status, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.setStatus(status , id));

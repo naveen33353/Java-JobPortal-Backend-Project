@@ -21,7 +21,7 @@ public class CompanyController {
     private  final ICompanyService service;
     private final ModelMapper modelMapper;
 
-       // @PreAuthorize("hasRole('COMPANY')")
+//        @PreAuthorize("hasRole('COMPANY')")
         @PostMapping
         public Company createCompany (@RequestBody Company company){
 
@@ -39,12 +39,14 @@ public class CompanyController {
         return modelMapper.map(company, CompanyDTO.class);
     }
 
+                @PreAuthorize("hasRole('COMPANY')")
                 @PutMapping("/{id}")
                 public Company updateCompany (@PathVariable Long id,
                         @RequestBody Company company){
                     return service.updateCompany(id, company);
                 }
 
+                @PreAuthorize("hasRole('COMPANY')")
                 @DeleteMapping("/{id}")
                 public String deleteCompany (@PathVariable Long id){
                     return service.deleteCompany(id);

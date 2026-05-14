@@ -27,6 +27,7 @@ public class JobSeekerController {
         return ResponseEntity.ok(service.getJobSeekerById(id));
     }
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @PutMapping("/{id}")
     public ResponseEntity<JobSeekerResponseDTO> update(
             @PathVariable Long id,
@@ -34,13 +35,14 @@ public class JobSeekerController {
         return ResponseEntity.ok(service.updateJobSeeker(id, dto));
     }
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         service.deleteJobSeeker(id);
         return ResponseEntity.ok("Deleted successfully");
     }
 
-    //@PreAuthorize("hasRole('JOBSEEKER')")
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @PostMapping("/{id}/uploadResume")
     public ResponseEntity<String>uploadResume(@PathVariable Long id,
                                               @RequestParam("file") MultipartFile file){
@@ -48,6 +50,7 @@ public class JobSeekerController {
         return ResponseEntity.ok("Resume uploaded successfully");
     }
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @DeleteMapping("/{id}/resume")
     public ResponseEntity<String> deleteResume(@PathVariable Long id) {
 

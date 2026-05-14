@@ -3,10 +3,13 @@ package com.aitrich.JobPortalSystem.Controller;
 import com.aitrich.JobPortalSystem.DTO.JobRequestDTO;
 import com.aitrich.JobPortalSystem.DTO.JobResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.Job;
+import com.aitrich.JobPortalSystem.Exception.ResourceNotFoundException;
 import com.aitrich.JobPortalSystem.Service.Job.IJobService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -22,9 +25,10 @@ public class JobController {
     private final IJobService jobService;
 
 
+    @PreAuthorize("hasRole('COMPANY')")
     @PostMapping
     public ResponseEntity<JobResponseDTO> createJob(
-            @RequestBody JobRequestDTO jobDto) {
+            @Valid @RequestBody JobRequestDTO jobDto) {
 
         JobResponseDTO response = jobService.createJob(jobDto);
 
@@ -33,11 +37,11 @@ public class JobController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getJobById(
+    public ResponseEntity<JobResponseDTO> getJobById(
             @PathVariable long id) {
         JobResponseDTO jobDTO = jobService.getJobById(id);
         if(jobDTO == null){
-            return  ResponseEntity.status(404).body("job not found!!!");
+            throw new ResourceNotFoundException("Job not found with id: " + id);
         }
             return ResponseEntity.ok(jobDTO);
 
@@ -51,26 +55,28 @@ public class JobController {
     }
 
 
+    @PreAuthorize("hasRole('COMPANY')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateJob(
+    public ResponseEntity<JobResponseDTO> updateJob(
             @PathVariable long id,
-            @RequestBody JobRequestDTO jobDto) {
+            @Valid @RequestBody JobRequestDTO jobDto) {
 
         JobResponseDTO jobDTO = jobService.getJobById(id);
         if(jobDTO == null){
-            return  ResponseEntity.status(404).body("job not found!!!");
+            throw new ResourceNotFoundException("Job not found with id: " + id);
         }
             return ResponseEntity.ok(jobService.updateJob(id, jobDto));
 
     }
 
 
+    @PreAuthorize("hasRole('COMPANY')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteJob(
             @PathVariable long id) {
         JobResponseDTO jobDTO = jobService.getJobById(id);
         if(jobDTO == null){
-            return  ResponseEntity.status(404).body("job not found!!!");
+            throw new ResourceNotFoundException("Job not found with id: " + id);
         }else {
             jobService.deleteJobById(id);
             return ResponseEntity.ok("Job deleted successfully");
@@ -84,15 +90,12 @@ public class JobController {
 
         List<JobResponseDTO> jobDTO = jobService.searchJob(keyword);
 
-        if(jobDTO.isEmpty()){
-            return ResponseEntity.status(404).body(Collections.emptyList());
-        }
-
             return ResponseEntity.ok(jobDTO);
 
     }
 
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @PostMapping("/{jobId}/save/{jobSeekerId}")
     public ResponseEntity<String> saveJobToProfile(
             @PathVariable Long jobId,
@@ -104,6 +107,7 @@ public class JobController {
     }
 
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @DeleteMapping("/{jobId}/unsave/{jobSeekerId}")
     public ResponseEntity<String> removeSavedJob(
             @PathVariable Long jobId,
@@ -115,6 +119,7 @@ public class JobController {
     }
 
 
+    @PreAuthorize("hasRole('JOBSEEKER')")
     @GetMapping("/saved/{jobSeekerId}")
     public ResponseEntity<List<JobResponseDTO>> getSavedJobs(
             @PathVariable Long jobSeekerId) {

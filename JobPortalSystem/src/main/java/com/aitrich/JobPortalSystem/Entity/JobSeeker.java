@@ -48,8 +48,13 @@ public class JobSeeker {
     @JsonManagedReference
     private List<Application> applications = new ArrayList<>();
 
-    @ElementCollection
-    private List<Job> savedJobs;
+    @ManyToMany
+    @JoinTable(
+            name = "saved_jobs",
+            joinColumns = @JoinColumn(name = "job_seeker_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id")
+    )
+    private List<Job> savedJobs = new ArrayList<>();
 }
 
 

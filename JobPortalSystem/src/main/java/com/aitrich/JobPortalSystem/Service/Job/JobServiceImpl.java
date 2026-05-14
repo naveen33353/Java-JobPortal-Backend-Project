@@ -5,6 +5,7 @@ import com.aitrich.JobPortalSystem.DTO.JobResponseDTO;
 import com.aitrich.JobPortalSystem.Entity.Company;
 import com.aitrich.JobPortalSystem.Entity.Job;
 import com.aitrich.JobPortalSystem.Entity.JobSeeker;
+import com.aitrich.JobPortalSystem.Exception.ResourceNotFoundException;
 import com.aitrich.JobPortalSystem.Repository.ICompanyRepo;
 import com.aitrich.JobPortalSystem.Repository.IJobRepo;
 import com.aitrich.JobPortalSystem.Repository.IJobSeekerRepo;
@@ -45,9 +46,9 @@ public class JobServiceImpl implements IJobService {
     @Override
     public JobResponseDTO getJobById(long id) {
         Job job = jobRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found"));
         Company company = companyRepo.findById(job.getCompany().getId())
-                .orElseThrow(() -> new RuntimeException( "company not found"));
+                .orElseThrow(() -> new ResourceNotFoundException( "company not found"));
 
         JobResponseDTO jobDTO =modelMapper.map(job, JobResponseDTO.class);
         jobDTO.setCompanyName(company.getCompanyName());
@@ -70,10 +71,10 @@ public class JobServiceImpl implements IJobService {
     public JobResponseDTO updateJob(long id, JobRequestDTO jobDto) {
 
         Job existing = jobRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found"));
 
         Company company = companyRepo.findById(jobDto.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
         existing.setCompany(company);
 
         existing.setDescription(jobDto.getDescription());
@@ -98,11 +99,11 @@ public class JobServiceImpl implements IJobService {
         JobResponseDTO dto = modelMapper.map(job, JobResponseDTO.class);
 
         if (job.getCompany() != null) {
-
             dto.setCompanyName(job.getCompany().getCompanyName());
             return dto;
         }else {
-            return null;
+            dto.setCompanyName(null); // Explicitly set to null instead of returning null
+            return dto;
         }
     }
 
@@ -118,30 +119,32 @@ public class JobServiceImpl implements IJobService {
     @Override
     public void saveAJobToProfile(Long jobId, Long jobSeekerId){
         JobSeeker jobSeeker = jobSeekerRepo.findById(jobSeekerId)
-                .orElseThrow(() -> new RuntimeException("JobSeeker not found with id"+jobSeekerId));
+                .orElseThrow(() -> new ResourceNotFoundException("JobSeeker not found with id"+jobSeekerId));
         Job job = jobRepo.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not Found with id "+jobId));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not Found with id "+jobId));
 
         if(!jobSeeker.getSavedJobs().contains(job)){
             jobSeeker.getSavedJobs().add(job);
+            jobSeekerRepo.save(jobSeeker);
         }
     }
 
     @Override
     public void removeSavedJobFromProfile(Long jobId, Long jobSeekerId){
         JobSeeker jobseeker = jobSeekerRepo.findById(jobSeekerId)
-                .orElseThrow(() -> new RuntimeException("JobSeeker not found with id "+jobSeekerId ));
+                .orElseThrow(() -> new ResourceNotFoundException("JobSeeker not found with id "+jobSeekerId ));
 
         Job job = jobRepo.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found with id " + jobId));
+                .orElseThrow(() -> new ResourceNotFoundException("Job not found with id " + jobId));
         jobseeker.getSavedJobs().remove(job);
+        jobSeekerRepo.save(jobseeker);
     }
 
     @Override
     public List<JobResponseDTO> getSavedJobFromProfile(Long jobSeekerId){
 
         JobSeeker jobSeeker = jobSeekerRepo.findById(jobSeekerId)
-                .orElseThrow(() -> new RuntimeException("JobSeeker not found with id" + jobSeekerId));
+                .orElseThrow(() -> new ResourceNotFoundException("JobSeeker not found with id" + jobSeekerId));
 
          return  jobSeeker.getSavedJobs()
                 .stream()
