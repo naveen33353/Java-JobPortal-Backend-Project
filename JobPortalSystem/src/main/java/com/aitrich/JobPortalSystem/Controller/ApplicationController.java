@@ -23,25 +23,30 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.postApplication(applicationPostDTO));
     }
 
+    @PreAuthorize("hasRole('JOBSEEKER') and #applicationService.getApplicationById(#id).jobSeekerId == authentication.principal.id or hasRole('COMPANY') and #applicationService.getApplicationById(#id).job.companyId == authentication.principal.id")
     @GetMapping("/{id}")
     public ResponseEntity<ApplicationResponseDTO> getApplicationById(@PathVariable long id) {
         return ResponseEntity.ok(applicationService.getApplicationById(id));
     }
 
+    @PreAuthorize("hasRole('COMPANY')")
     @GetMapping
     public ResponseEntity<List<ApplicationResponseDTO>> getAllApplications() {
         return ResponseEntity.ok(applicationService.getAllApplications());
     }
 
+    @PreAuthorize("hasRole('JOBSEEKER') and #applicationService.getApplicationById(#id).jobSeekerId == authentication.principal.id")
     @PutMapping("/{id}")
     public ResponseEntity<ApplicationResponseDTO> updateApplication(@RequestBody ApplicationPostDTO applicationDTO, @PathVariable long id) {
         return ResponseEntity.ok(applicationService.updateApplication(applicationDTO,id));
     }
 
+    @PreAuthorize("hasRole('JOBSEEKER') and #applicationService.getApplicationById(#id).jobSeekerId == authentication.principal.id")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteApplication(@PathVariable long id) {
         applicationService.deleteApplicationById(id);
-        return ResponseEntity.ok("Deleted successfully");    }
+        return ResponseEntity.ok("Deleted successfully");
+    }
 
     @PreAuthorize("hasRole('COMPANY')")
     @GetMapping("/job/{jobId}")
